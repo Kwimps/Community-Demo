@@ -21,7 +21,14 @@ spring:
       idle-timeout: 30000
   thymeleaf:
     cache: false
-
+  mail:
+    host: smtp.qq.com
+    port: 465
+    username: wimp.wangt@qq.com
+    password: ksbkhazpdmlfceeh
+    protocol: smtps
+    properties:
+      mail.smtp.ssl.enable: true
 
 mybatis:
   mapper-locations:
@@ -34,3 +41,7 @@ mybatis:
     #匹配驼峰命名和下划线命名
     map-underscore-to-camel-case: true
 
+#community
+community:
+  path:
+    domain: "http://localhost:9000"

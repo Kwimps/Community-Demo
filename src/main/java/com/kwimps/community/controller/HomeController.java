@@ -31,7 +31,6 @@ public class HomeController {
         // page中类属性并没有from和to 但是构造出来的page却有 是因为spring的构造bean是根据set、get来的
         page.setRows(discussPostService.findDiscussPostRows(0));
         page.setPath("/index");
-        System.out.println(page.getCurrent());
         List<DiscussPost> list = discussPostService.findDiscussPosts(0, page.getOffset(), page.getLimit());
         List<Map<String, Object>> discussPosts = new ArrayList<>();
         if (list != null) {

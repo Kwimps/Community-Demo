@@ -4,12 +4,15 @@ import com.kwimps.community.dao.DiscussPostMapper;
 import com.kwimps.community.dao.UserMapper;
 import com.kwimps.community.entity.DiscussPost;
 import com.kwimps.community.entity.User;
+import com.kwimps.community.util.MailClient;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -24,6 +27,12 @@ class CommunityApplicationTests {
 
     @Resource
     private DiscussPostMapper discussPostMapper;
+
+    @Resource
+    private MailClient mailClient;
+
+    @Resource
+    private TemplateEngine templateEngine;
 
     @Test
     void contextLoads() {
@@ -52,6 +61,15 @@ class CommunityApplicationTests {
 
         int rows = discussPostMapper.selectDiscussPostRows(149);
         System.out.println(rows);
+    }
+
+    @Test
+    public void mailTest(){
+        Context context = new Context();
+        context.setVariable("username","晴路卡");
+        String tmp = templateEngine.process("/mail/demo",context);
+        System.out.println(tmp);
+        mailClient.sendMail("2683511546@qq.com","你好",tmp);
     }
 
     @Test
