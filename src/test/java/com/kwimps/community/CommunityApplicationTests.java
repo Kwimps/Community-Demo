@@ -1,10 +1,13 @@
 package com.kwimps.community;
 
 import com.kwimps.community.dao.DiscussPostMapper;
+import com.kwimps.community.dao.LoginTicketMapper;
 import com.kwimps.community.dao.UserMapper;
 import com.kwimps.community.entity.DiscussPost;
+import com.kwimps.community.entity.LoginTicket;
 import com.kwimps.community.entity.User;
 import com.kwimps.community.util.MailClient;
+import com.kwimps.community.util.SensitiveFilter;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +26,9 @@ import java.util.List;
 class CommunityApplicationTests {
 
     @Resource
+    private LoginTicketMapper loginTicketMapper;
+
+    @Resource
     private UserMapper userMapper;
 
     @Resource
@@ -33,6 +39,9 @@ class CommunityApplicationTests {
 
     @Resource
     private TemplateEngine templateEngine;
+
+    @Resource
+    private SensitiveFilter sensitiveFilter;
 
     @Test
     void contextLoads() {
@@ -73,7 +82,18 @@ class CommunityApplicationTests {
     }
 
     @Test
+    public void testInsertLoginTicket(){
+        loginTicketMapper.updateStatus("asd",1);
+    }
+
+    @Test
     public void logTest(){
+
+    }
+
+    @Test
+    public void filterTest(){
+        System.out.println(sensitiveFilter.filter("我要去赌博，我要去嫖娼"));
 
     }
 

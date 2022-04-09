@@ -45,3 +45,4 @@ mybatis:
 community:
   path:
     domain: "http://localhost:9000"
+    upload: "d:/work/data/upload"

@@ -1,6 +1,8 @@
 package com.kwimps.community.service.impl;
 
+import com.kwimps.community.dao.LoginTicketMapper;
 import com.kwimps.community.dao.UserMapper;
+import com.kwimps.community.entity.LoginTicket;
 import com.kwimps.community.entity.User;
 import com.kwimps.community.service.UserService;
 import com.kwimps.community.util.CommunityConstant;
@@ -24,6 +26,9 @@ public class UserServiceImpl implements UserService, CommunityConstant {
 
     @Resource
     private UserMapper userMapper;
+
+    @Resource
+    private LoginTicketMapper loginTicketMapper;
 
     @Autowired
     private MailClient mailClient;
@@ -111,5 +116,78 @@ public class UserServiceImpl implements UserService, CommunityConstant {
         } else {
             return ACTIVATION_FAILURE;
         }
+    }
+
+    @Override
+    public Map<String, Object> login(String username, String password, long expiredSeconds) {
+        Map<String, Object> map = new HashMap<>();
+
+        // 空值处理
+        if (StringUtils.isBlank(username)) {
+            map.put("usernameMsg", "账号不能为空!");
+            return map;
+        }
+        if (StringUtils.isBlank(password)) {
+            map.put("passwordMsg", "密码不能为空!");
+            return map;
+        }
+
+        // 验证账号
+        User user = userMapper.selectByName(username);
+        if (user == null) {
+            map.put("usernameMsg", "该账号不存在!");
+            return map;
+        }
+
+        // 验证状态
+        if (user.getStatus() == 0) {
+            map.put("usernameMsg", "该账号未激活!");
+            return map;
+        }
+
+        // 验证密码
+        password = CommunityUtil.md5(password + user.getSalt());
+        if (!user.getPassword().equals(password)) {
+            map.put("passwordMsg", "密码不正确!");
+            return map;
+        }
+
+        // 生成登录凭证
+        LoginTicket loginTicket = new LoginTicket();
+        loginTicket.setUserId(user.getId());
+        loginTicket.setTicket(CommunityUtil.generateUUID());
+        loginTicket.setStatus(0);
+        loginTicket.setExpired(new Date(System.currentTimeMillis() + expiredSeconds * 1000));
+        loginTicketMapper.insertLoginTicket(loginTicket);
+
+        map.put("ticket", loginTicket.getTicket());
+        return map;
+    }
+
+    @Override
+    public void logout(String ticket) {
+        loginTicketMapper.updateStatus(ticket,1);
+    }
+
+    @Override
+    public LoginTicket findLoginTicket(String ticket) {
+        return loginTicketMapper.selectByTicket(ticket);
+    }
+
+    @Override
+    public int updateHeader(int userId, String headUrl) {
+        return userMapper.updateHeader(userId,headUrl);
+    }
+
+    @Override
+    public Map<String, Object> updatePassword(int userId, String newPassword, String oldPassword) {
+        Map<String,Object> map = new HashMap<>();
+        User user = userMapper.selectById(userId);
+        if (!CommunityUtil.md5(oldPassword+user.getSalt()).equals(user.getPassword())){
+            map.put("passwordMsg","密码不匹配");
+            return map;
+        }
+        userMapper.updatePassword(userId,CommunityUtil.md5(newPassword+user.getSalt()));
+        return map;
     }
 }
