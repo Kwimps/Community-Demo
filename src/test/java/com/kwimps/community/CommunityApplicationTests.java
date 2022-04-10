@@ -6,6 +6,7 @@ import com.kwimps.community.dao.UserMapper;
 import com.kwimps.community.entity.DiscussPost;
 import com.kwimps.community.entity.LoginTicket;
 import com.kwimps.community.entity.User;
+import com.kwimps.community.service.impl.testService;
 import com.kwimps.community.util.MailClient;
 import com.kwimps.community.util.SensitiveFilter;
 import org.junit.jupiter.api.Test;
@@ -42,6 +43,10 @@ class CommunityApplicationTests {
 
     @Resource
     private SensitiveFilter sensitiveFilter;
+
+    @Resource
+    private com.kwimps.community.service.impl.testService testService;
+
 
     @Test
     void contextLoads() {
@@ -95,6 +100,11 @@ class CommunityApplicationTests {
     public void filterTest(){
         System.out.println(sensitiveFilter.filter("我要去赌博，我要去嫖娼"));
 
+    }
+
+    @Test
+    public void tttest(){
+        System.out.println("test");
     }
 
 }
