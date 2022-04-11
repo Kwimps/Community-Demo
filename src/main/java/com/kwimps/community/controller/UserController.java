@@ -49,7 +49,7 @@ public class UserController {
     @LoginRequired
     @RequestMapping("/setting")
     public String toSettingPage(){
-        return "/site/setting";
+        return "site/setting";
     }
 
     @LoginRequired
@@ -66,9 +66,9 @@ public class UserController {
             model.addAttribute("error", "文件的格式不正确!");
             return "/site/setting";
         }
-
+        User user = hostHolder.getUser();
         // 生成随机文件名
-        fileName = CommunityUtil.generateUUID() + suffix;
+        fileName = user.getUsername() + suffix;
         // 确定文件存放的路径
         File dest = new File(uploadPath + "/" + fileName);
         try {
@@ -81,7 +81,6 @@ public class UserController {
 
         // 更新当前用户的头像的路径(web访问路径)
         // http://localhost:8080/community/user/header/xxx.png
-        User user = hostHolder.getUser();
         String headerUrl = domain + contextPath + "/user/header/" + fileName;
         userService.updateHeader(user.getId(), headerUrl);
 

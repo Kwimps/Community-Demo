@@ -3,6 +3,8 @@ package com.kwimps.community.service;
 import com.kwimps.community.entity.LoginTicket;
 import com.kwimps.community.entity.User;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Map;
 
 public interface UserService {
@@ -22,5 +24,7 @@ public interface UserService {
     public int updateHeader(int userId,String headUrl);
 
     public Map<String,Object> updatePassword(int userId,String newPassword,String oldPassword);
+
+    public User findUserByName(String username);
 
 }
