@@ -43,7 +43,6 @@ class CommunityApplicationTests {
 
     @Test
     public void userTest(){
-        likeService.like(12,1,12);
 
     }
 

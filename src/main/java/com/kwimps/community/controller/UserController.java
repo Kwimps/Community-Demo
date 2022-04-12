@@ -2,6 +2,7 @@ package com.kwimps.community.controller;
 
 import com.kwimps.community.controller.annotation.LoginRequired;
 import com.kwimps.community.entity.User;
+import com.kwimps.community.service.LikeService;
 import com.kwimps.community.service.UserService;
 import com.kwimps.community.util.CommunityUtil;
 import com.kwimps.community.util.HostHolder;
@@ -46,6 +47,9 @@ public class UserController {
     @Autowired
     private HostHolder hostHolder;
 
+    @Autowired
+    private LikeService likeService;
+
     @LoginRequired
     @RequestMapping("/setting")
     public String toSettingPage(){
@@ -57,14 +61,14 @@ public class UserController {
     public String uploadHeader(MultipartFile headerImage, Model model) {
         if (headerImage == null) {
             model.addAttribute("error", "您还没有选择图片!");
-            return "/site/setting";
+            return "site/setting";
         }
 
         String fileName = headerImage.getOriginalFilename();
         String suffix = fileName.substring(fileName.lastIndexOf("."));
         if (StringUtils.isBlank(suffix)) {
             model.addAttribute("error", "文件的格式不正确!");
-            return "/site/setting";
+            return "site/setting";
         }
         User user = hostHolder.getUser();
         // 生成随机文件名
@@ -127,6 +131,21 @@ public class UserController {
 
     }
 
+    @RequestMapping(path = "/profile/{userId}", method = RequestMethod.GET)
+    public String getProfilePage(@PathVariable("userId") int userId, Model model) {
+        User user = userService.findUserById(userId);
+        if (user == null) {
+            throw new RuntimeException("该用户不存在!");
+        }
+
+        // 用户
+        model.addAttribute("user", user);
+        // 点赞数量
+        int likeCount = likeService.findUserLikeCount(userId);
+        model.addAttribute("likeCount", likeCount);
+
+        return "site/profile";
+    }
 
 
 }
