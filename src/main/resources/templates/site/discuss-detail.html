@@ -31,7 +31,7 @@
 				</h6>
 				<!-- 作者 -->
 				<div class="media pb-3 border-bottom">
-					<a href="profile.html">
+					<a th:href="@{|/user/profile/${user.id}|}">
 						<img th:src="${user.headerUrl}" class="align-self-start mr-4 rounded-circle user-header" alt="用户头像" >
 					</a>
 					<div class="media-body">
@@ -70,7 +70,7 @@
 				<ul class="list-unstyled mt-4">
 					<!-- 第1条回帖 -->
 					<li class="media pb-3 pt-3 mb-3 border-bottom" th:each="cvo:${comments}">
-						<a href="profile.html">
+						<a th:href="@{|/user/profile/${cvo.user.id}|}">
 							<img th:src="${cvo.user.headerUrl}" class="align-self-start mr-4 rounded-circle user-header" alt="用户头像" >
 						</a>
 						<div class="media-body">
@@ -101,11 +101,13 @@
 								<li class="pb-3 pt-3 mb-3 border-bottom" th:each="rvo:${cvo.replys}">
 									<div>
 										<span th:if="${rvo.target==null}">
-											<b class="text-info" th:text="${rvo.user.username}">userId</b>:&nbsp;&nbsp;
+											<a th:href="@{|/user/profile/${rvo.user.id}|}"><b class="text-info" th:text="${rvo.user.username}">userId</b></a>:&nbsp;&nbsp;
 										</span>
 										<span th:if="${rvo.target!=null}">
-											<i class="text-info" th:text="${rvo.user.username}">userId</i> 回复
-											<b class="text-info" th:text="${rvo.target.username}">targetId</b>:&nbsp;&nbsp;
+											<a th:href="@{|/user/profile/${rvo.user.id}|}"><i class="text-info" th:text="${rvo.user.username}">userId</i></a>
+											回复
+											<a th:href="@{|/user/profile/${rvo.target.id}|}"><b class="text-info" th:text="${rvo.target.username}">targetId</b></a>
+											:&nbsp;&nbsp;
 										</span>
 										<span th:utext="${rvo.reply.content}">reply content</span>
 									</div>
