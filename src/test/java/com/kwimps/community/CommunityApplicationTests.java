@@ -6,6 +6,7 @@ import com.kwimps.community.dao.UserMapper;
 import com.kwimps.community.entity.DiscussPost;
 import com.kwimps.community.entity.LoginTicket;
 import com.kwimps.community.entity.User;
+import com.kwimps.community.service.LikeService;
 import com.kwimps.community.service.impl.testService;
 import com.kwimps.community.util.MailClient;
 import com.kwimps.community.util.SensitiveFilter;
@@ -14,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
@@ -32,43 +34,19 @@ class CommunityApplicationTests {
     @Autowired
     private MailClient mailClient;
 
+    @Autowired
+    private LikeService likeService;
+
     @Test
     void contextLoads() {
     }
 
     @Test
     public void userTest(){
+        likeService.like(12,1,12);
 
     }
 
-    @Test
-    public void discussTest(){
 
-    }
-
-    @Test
-    public void testHtmlMail() {
-    }
-
-    @Test
-    public void testInsertLoginTicket(){
-
-    }
-
-    @Test
-    public void logTest(){
-
-    }
-
-    @Test
-    public void filterTest(){
-        System.out.println();
-
-    }
-
-    @Test
-    public void tttest(){
-        System.out.println("test");
-    }
 
 }

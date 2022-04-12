@@ -19,8 +19,10 @@ spring:
       maximum-pool-size: 15
       minimum-idle: 5
       idle-timeout: 30000
+
   thymeleaf:
     cache: false
+
   mail:
     host: smtp.qq.com
     port: 465
@@ -29,6 +31,11 @@ spring:
     protocol: smtps
     properties:
       mail.smtp.ssl.enable: true
+
+  redis:
+    host: 101.37.36.161
+    port: 4396
+    password: 'Cloud1944:'
 
 mybatis:
   mapper-locations:
@@ -50,3 +57,5 @@ community:
 
 logging:
   config: "classpath:logback-dev.xml"
+
+
