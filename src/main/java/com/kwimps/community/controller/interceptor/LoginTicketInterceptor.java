@@ -2,6 +2,7 @@ package com.kwimps.community.controller.interceptor;
 
 import com.kwimps.community.entity.LoginTicket;
 import com.kwimps.community.entity.User;
+import com.kwimps.community.service.MessageService;
 import com.kwimps.community.service.UserService;
 import com.kwimps.community.util.CookieUtil;
 import com.kwimps.community.util.HostHolder;
@@ -19,6 +20,9 @@ public class LoginTicketInterceptor implements HandlerInterceptor {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private MessageService messageService;
 
     @Autowired
     private HostHolder hostHolder;
@@ -48,6 +52,8 @@ public class LoginTicketInterceptor implements HandlerInterceptor {
         User user = hostHolder.getUser();
         if (user != null && modelAndView != null) {
             modelAndView.addObject("loginUser", user);
+            long messageNums = messageService.findLetterUnreadCount(user.getId(),null);
+            modelAndView.addObject("unreadMsgNums",messageNums);
         }
     }
 
