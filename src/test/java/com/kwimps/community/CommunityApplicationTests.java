@@ -37,13 +37,17 @@ class CommunityApplicationTests {
     @Autowired
     private LikeService likeService;
 
+    @Autowired
+    private RedisTemplate redisTemplate;
+
     @Test
     void contextLoads() {
     }
 
     @Test
     public void userTest(){
-
+        String t = (String) redisTemplate.opsForValue().get("user:113");
+        System.out.println(t);
     }
 
 
