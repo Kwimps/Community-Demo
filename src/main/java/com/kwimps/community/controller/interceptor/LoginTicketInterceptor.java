@@ -52,8 +52,6 @@ public class LoginTicketInterceptor implements HandlerInterceptor {
         User user = hostHolder.getUser();
         if (user != null && modelAndView != null) {
             modelAndView.addObject("loginUser", user);
-            long messageNums = messageService.findLetterUnreadCount(user.getId(),null);
-            modelAndView.addObject("unreadMsgNums",messageNums);
         }
     }
 

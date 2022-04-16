@@ -1,7 +1,9 @@
 package com.kwimps.community.controller;
 
+import com.kwimps.community.entity.Event;
 import com.kwimps.community.entity.Page;
 import com.kwimps.community.entity.User;
+import com.kwimps.community.event.EventProducer;
 import com.kwimps.community.service.FollowService;
 import com.kwimps.community.service.UserService;
 import com.kwimps.community.util.CommunityConstant;
@@ -31,6 +33,9 @@ public class FollowController implements CommunityConstant {
     @Autowired
     private HostHolder hostHolder;
 
+    @Autowired
+    private EventProducer eventProducer;
+
     @RequestMapping(path = "/follow", method = RequestMethod.POST)
     @ResponseBody
     public String follow(int entityType, int entityId) {
@@ -43,6 +48,15 @@ public class FollowController implements CommunityConstant {
         followService.follow(user.getId(), entityType, entityId);
 
         if (followService.hasFollowed(user.getId(), entityType,entityId)){
+            // 触发关注事件
+            Event event = new Event()
+                    .setTopic(TOPIC_FOLLOW)
+                    .setUserId(hostHolder.getUser().getId())
+                    .setEntityType(entityType)
+                    .setEntityId(entityId)
+                    .setEntityUserId(entityId);
+            eventProducer.fireEvent(event);
+
             return CommunityUtil.getJSONString(0, "已关注!");
         }else {
             return CommunityUtil.getJSONString(0, "已取关!");

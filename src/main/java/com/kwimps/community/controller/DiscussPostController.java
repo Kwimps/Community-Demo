@@ -1,10 +1,8 @@
 package com.kwimps.community.controller;
 
 import com.kwimps.community.controller.annotation.LoginRequired;
-import com.kwimps.community.entity.Comment;
-import com.kwimps.community.entity.DiscussPost;
-import com.kwimps.community.entity.Page;
-import com.kwimps.community.entity.User;
+import com.kwimps.community.entity.*;
+import com.kwimps.community.event.EventProducer;
 import com.kwimps.community.service.CommentService;
 import com.kwimps.community.service.DiscussPostService;
 import com.kwimps.community.service.LikeService;
@@ -42,6 +40,8 @@ public class DiscussPostController implements CommunityConstant {
     @Resource
     private LikeService likeService;
 
+    @Autowired
+    private EventProducer eventProducer;
 
     @RequestMapping(path = "/add", method = RequestMethod.POST)
     @ResponseBody
@@ -57,6 +57,14 @@ public class DiscussPostController implements CommunityConstant {
         post.setContent(content);
         post.setCreateTime(new Date());
         discussPostService.addDiscussPost(post);
+
+        Event event = new Event()
+                .setTopic(TOPIC_PUBLISH)
+                .setUserId(user.getId())
+                .setEntityType(ENTITY_TYPE_POST)
+                .setEntityId(post.getId());
+        eventProducer.fireEvent(event);
+
 
         // 报错的情况,将来统一处理.
         return CommunityUtil.getJSONString(0, "发布成功!");

@@ -1,8 +1,11 @@
 package com.kwimps.community.controller;
 
 import com.kwimps.community.controller.annotation.LoginRequired;
+import com.kwimps.community.entity.Event;
 import com.kwimps.community.entity.User;
+import com.kwimps.community.event.EventProducer;
 import com.kwimps.community.service.LikeService;
+import com.kwimps.community.util.CommunityConstant;
 import com.kwimps.community.util.CommunityUtil;
 import com.kwimps.community.util.HostHolder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-public class LikeController {
+public class LikeController implements CommunityConstant {
 
     @Resource
     private LikeService likeService;
@@ -24,10 +27,13 @@ public class LikeController {
     @Resource
     private HostHolder hostHolder;
 
+    @Autowired
+    private EventProducer eventProducer;
+
 
     @RequestMapping(path = "/like", method = RequestMethod.POST)
     @ResponseBody
-    public String like(int entityType, int entityId, int entityUserId) {
+    public String like(int entityType, int entityId, int entityUserId,int postId) {
         User user = hostHolder.getUser();
         if (user == null){
             return CommunityUtil.getJSONString(1,"请先登录");
@@ -43,6 +49,18 @@ public class LikeController {
         Map<String, Object> map = new HashMap<>();
         map.put("likeCount", likeCount);
         map.put("likeStatus", likeStatus);
+
+        // 触发点赞事件
+        if (likeStatus == 1) {
+            Event event = new Event()
+                    .setTopic(TOPIC_LIKE)
+                    .setUserId(hostHolder.getUser().getId())
+                    .setEntityType(entityType)
+                    .setEntityId(entityId)
+                    .setEntityUserId(entityUserId)
+                    .setData("postId", postId);
+            eventProducer.fireEvent(event);
+        }
 
         return CommunityUtil.getJSONString(0, null, map);
     }
