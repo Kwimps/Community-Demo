@@ -6,6 +6,7 @@ import com.kwimps.community.dao.elasticSearch.DiscussPostRepository;
 import com.kwimps.community.entity.DiscussPost;
 import com.kwimps.community.service.ElasticSearchService;
 import com.kwimps.community.service.LikeService;
+import com.kwimps.community.service.UserService;
 import com.kwimps.community.util.MailClient;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
@@ -63,13 +64,16 @@ class CommunityApplicationTests {
     @Autowired
     private ElasticSearchService elasticSearchService;
 
+    @Autowired
+    private UserService userService;
+
     @Test
     void contextLoads() {
     }
 
     @Test
     public void highlightQuery() throws Exception{
-        discussPostRepository.saveAll(discussPostMapper.selectDiscussPosts(0,0,400));
+
     }
 
 

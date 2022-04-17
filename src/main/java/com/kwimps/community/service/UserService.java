@@ -2,9 +2,11 @@ package com.kwimps.community.service;
 
 import com.kwimps.community.entity.LoginTicket;
 import com.kwimps.community.entity.User;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Map;
 
 public interface UserService {
@@ -26,5 +28,7 @@ public interface UserService {
     public Map<String,Object> updatePassword(int userId,String newPassword,String oldPassword);
 
     public User findUserByName(String username);
+
+    public Collection<? extends GrantedAuthority> getAuthorities(int userId);
 
 }

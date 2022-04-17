@@ -16,4 +16,8 @@ public interface DiscussPostService {
 
     public int updateCommentCount(int id, int commentCount);
 
+    public int updateType(int id, int type);
+
+    public int updateStatus(int id, int status);
+
 }
