@@ -246,6 +246,7 @@ public class UserServiceImpl implements UserService, CommunityConstant {
     public Collection<? extends GrantedAuthority> getAuthorities(int userId) {
         User user = this.findUserById(userId);
         List<GrantedAuthority> list = new ArrayList<>();
+        System.out.println(user.getType());
         list.add(new GrantedAuthority() {
 
             @Override
