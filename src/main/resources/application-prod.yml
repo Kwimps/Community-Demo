@@ -26,8 +26,9 @@ spring:
   mail:
     host: smtp.qq.com
     port: 465
-    username: wimp.wangt@qq.com
-    password: ksbkhazpdmlfceeh
+    #使用你的邮箱
+    username:
+    password:
     protocol: smtps
     properties:
       mail.smtp.ssl.enable: true
@@ -36,6 +37,7 @@ spring:
     host: localhost
     port: 4396
     password: 'Cloud1944:'
+
 
   kafka:
     bootstrap-servers: 'localhost:9092'
